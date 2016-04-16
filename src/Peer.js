@@ -170,6 +170,12 @@ class Peer {
 	}
 
 	static mockPosition() {
-		return {"coords":{"accuracy":0.0,"altitude":0.0,"altitudeAccuracy":0.0,"heading":0.0,"latitude":44.76487,"longitude":10.30836,"speed":0.0},"timestamp":0}
+		    var latitude = 44.76487;
+		    var longitude = 10.30836;
+		    var heading = Math.random() * 360.0;
+		    var distance = Math.random() * 20000;
+		    
+		    var destination = Geography.destination(latitude, longitude, heading, distance);
+		    return {"coords":{"accuracy":0.0,"altitude":0.0,"altitudeAccuracy":0.0,"heading":destination.heading,"latitude":destination.latitude,"longitude":destination.longitude,"speed":0.0},"timestamp":Date.now()};
 	}
 }
