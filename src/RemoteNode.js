@@ -81,4 +81,8 @@ class RemoteNode {
         }
     }
 
+    setSignalingNode(signalingNode) {
+        this.signalingNode = signalingNode;
+    }
+
 }
