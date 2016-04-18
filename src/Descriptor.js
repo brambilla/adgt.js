@@ -1,8 +1,8 @@
 class Descriptor {
 
-	constructor(key, position) {
-		this.key = key;
-		this.position = position;
-	}
+    constructor(key, position) {
+        this.key = key;
+        this.position = position;
+    }
 
 }
