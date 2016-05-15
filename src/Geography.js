@@ -44,9 +44,10 @@ class Geography {
         var longitude = 10.30836;
         var heading = Math.random() * 360.0;
         var distance = Math.random() * 20000;
+        var speed = Math.random() * 36.11;
 
         var destination = Geography.destination(latitude, longitude, heading, distance);
-        return {"coords":{"accuracy":0.0,"altitude":0.0,"altitudeAccuracy":0.0,"heading":destination.heading,"latitude":destination.latitude,"longitude":destination.longitude,"speed":0.0},"timestamp":Date.now()};
+        return {"coords":{"accuracy":0.0,"altitude":0.0,"altitudeAccuracy":0.0,"heading":destination.heading,"latitude":destination.latitude,"longitude":destination.longitude,"speed":speed},"timestamp":Date.now()};
     };
 
 }
