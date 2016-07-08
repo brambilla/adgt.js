@@ -44,7 +44,7 @@ class RemoteNode {
     }
 
     isConnected() {
-        return this.datachannel.readyState === "open";
+        return "open" === this.datachannel.readyState;
     }
 
     connect() {
