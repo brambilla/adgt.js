@@ -9,8 +9,12 @@ class Peer {
         this.listeners = new Map();
     }
 
-    send(message) {
+    geocast(message) {
         this.geobucket.geocast(message);
+    }
+    
+    send(message, descriptor) {
+        this.geobucket.send(message, descriptor);
     }
 
     on(event, callback) {
@@ -170,9 +174,7 @@ class Peer {
             var nodes = this.geobucket.retrieve(this.descriptor.position, this.options.discovery.request_limit);
             var message = new DiscoveryRequestMessage(this.descriptor);
             for(var node of nodes) {
-                if(node.isConnected()) {
-                    node.send(message);
-                }
+                node.send(message);
             }
         }
     }
