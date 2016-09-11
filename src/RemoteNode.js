@@ -6,6 +6,7 @@ class RemoteNode {
         this.options = options;
         this.bootstrappingNode = bootstrappingNode;
         this.signalingNode = signalingNode;
+        this.pendingMessages = new Set();
 
         var self = this;
         this.connection = new RTCPeerConnection(options.configuration);
@@ -27,6 +28,14 @@ class RemoteNode {
                 self.peer.geobucket.remove(self);
                 self.peer.emit("neighbors", self.peer.geobucket.descriptors());
             };
+            
+            self.datachannel.onopen = function (event) {
+                self.pendingMessages.forEach(function(message) {
+                    self.datachannel.send(JSON.stringify(message));
+                    console.log('Sent ' + message.type + ' to ' + self.descriptor.key);
+                });
+                self.pendingMessages.clear();
+            };
         };
 
         if(isCalled) {
@@ -40,11 +49,19 @@ class RemoteNode {
                 self.peer.geobucket.remove(self);
                 self.peer.emit("neighbors", self.peer.geobucket.descriptors());
             };
+            
+            this.datachannel.onopen = function (event) {
+                self.pendingMessages.forEach(function(message) {
+                    self.datachannel.send(JSON.stringify(message));
+                    console.log('Sent ' + message.type + ' to ' + self.descriptor.key);
+                });
+                self.pendingMessages.clear();
+            };
         }
     }
 
     isConnected() {
-        return "open" === this.datachannel.readyState;
+        return (this.datachannel && ("open" === this.datachannel.readyState));
     }
 
     connect() {
@@ -60,8 +77,12 @@ class RemoteNode {
     }
 
     send(message) {
-        this.datachannel.send(JSON.stringify(message));
-        console.log('Sent ' + message.type + ' to ' + this.descriptor.key);
+        if(this.isConnected()) {
+            this.datachannel.send(JSON.stringify(message));
+            console.log('Sent ' + message.type + ' to ' + this.descriptor.key);
+        } else {
+            this.pendingMessages.add(message);
+        }
     }
 
     sendToSignalingNode(message) {
