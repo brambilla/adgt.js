@@ -115,9 +115,15 @@ class GeoBucket {
     geocast(data) {
         for(var node of this.nodes) {
             var message = new DataMessage(node.peer.descriptor, this.position, data);
-            if(node.isConnected()) {
-                node.send(message);
-            }
+            node.send(message);
+        }
+    }
+    
+    send(data, descriptor) {
+        var node = this.get(descriptor);
+        if(node !== null) {
+            var message = new DataMessage(node.peer.descriptor, this.position, data);
+            node.send(message);
         }
     }
 
