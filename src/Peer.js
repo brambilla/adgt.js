@@ -27,10 +27,23 @@ class Peer {
         }
     }
 
-    emit(event, data) {
+    emit() {
+        var event = arguments[0];
         if(this.listeners.has(event)) {
-            for(var callback of this.listeners.get(event)) {
-                callback(data);
+            switch(event) {
+            case 'neighbors':
+                var descriptors = arguments[1];
+                for(var callback of this.listeners.get(event)) {
+                    callback(descriptors);
+                }
+                break;
+            case 'data':
+                var descriptor = arguments[1];
+                var data = arguments[2];
+                for(var callback of this.listeners.get(event)) {
+                    callback(descriptor, data);
+                }
+                break;
             }
         }
     }
@@ -90,7 +103,7 @@ class Peer {
                 break;
 
             case DataMessage.type():
-                this.emit("data", message.data);
+                this.emit("data", message.sender, message.data);
                 break;
 
             case LeaveMessage.type():
